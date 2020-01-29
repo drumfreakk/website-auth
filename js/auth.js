@@ -1,37 +1,36 @@
-function getCookie(name) {
-    var dc = document.cookie;
-    var prefix = name + "=";
-    var begin = dc.indexOf("; " + prefix);
-    if (begin == -1) {
-        begin = dc.indexOf(prefix);
-        if (begin != 0) return null;
-    }
-    else
-    {
-        begin += 2;
-        var end = document.cookie.indexOf(";", begin);
-        if (end == -1) {
-        end = dc.length;
-        }
-    }
-    // because unescape has been deprecated, replaced with decodeURI
-    //return unescape(dc.substring(begin + prefix.length, end));
-    return decodeURI(dc.substring(begin + prefix.length, end));
+
+function loggedIn(name){
+	document.getElementById("content").innerHTML = "Welcome, ".concat(name);
 }
 
-function loggedIn(){
-	alert("Logged in as ".concat(getCookie("username")));
+window.addEventListener('load', function () {
+	var authcode = getCookie("authcode");
+
+	if (authcode != null) {
+		loggedIn(authcode);
+	}
+})
+
+
+
+function submitCreds(){
+	var username = document.getElementById("username").value;
+	var password = document.getElementById("password").value;
+
+	if(username == ""){
+		document.getElementById("comment").innerHTML = "Please fill in a username";
+		return;
+	}
+	if(password == ""){
+		document.getElementById("comment").innerHTML = "Please fill in a password";
+		return;
+	}
+
+	//var authcode = getAuthcode(username, password);
+
+	var date = new Date();
+	date.setDate(date.getDate() + 10);	
+
+	document.cookie = "authcode=".concat(username).concat("; expires=").concat(date.toString());
+	loggedIn(username);
 }
-
-
-
-
-var authCode = getCookie("authCode");
-
-if (authCode == null) {
-	document.cookie = "username=John Doe; expires=Fri, 18 Dec 2020 12:00:00 GMT+0100";
-} else {
-	loggedIn();
-}
-
-
