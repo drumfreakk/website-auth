@@ -13,7 +13,4 @@ function random_str(
     }
 	return implode('', $pieces);
 }
-function test(){
-	return "kip";
-}
 ?>

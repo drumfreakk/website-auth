@@ -26,11 +26,25 @@ function submitCreds(){
 		return;
 	}
 
-	//var authcode = getAuthcode(username, password);
-
-	var date = new Date();
-	date.setDate(date.getDate() + 10);	
-
-	document.cookie = "authcode=".concat(username).concat("; expires=").concat(date.toString());
-	loggedIn(username);
+	$.post("/php/auth.php",
+	{
+		uname: username,
+		pswd: password
+	},
+	function(data,status){
+		alert("Data: " + data + "\nStatus: " + status);
+		document.cookie = "authcode=".concat(data.split("&")[1]).concat("; expires=").concat(data.split("&")[0]);
+		loggedIn(data);
+	});
 }
+
+
+function unam(){
+	$.post("/php/uname.php",
+	{
+	},
+	function(data,status){
+		alert("Data: " + data + "\nStatus: " + status);
+	});
+}
+
