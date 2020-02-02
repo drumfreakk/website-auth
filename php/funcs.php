@@ -1,4 +1,10 @@
 <?php
+
+$server="localhost";
+$username="website";
+$password="";
+
+
 function random_str(
     int $length = 64,
     string $keyspace = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
