@@ -1,9 +1,23 @@
 <?php
 
-$server="localhost";
-$username="website";
-$password="";
+function initDB(){
 
+	$dbpass = fopen("dbpass", "r") or die("Unable to open file!");
+
+	$server="localhost";
+	$username="website";
+	$password=fread($dbpass, filesize("dpbass"));
+	$database="website";
+
+	fclose($dbpass);
+
+	$conn=new mysqli($server,$username,$password,$database);
+
+	if($connect->connect_error)
+		echo $connect->connect_error;
+
+	return $conn;
+}
 
 function random_str(
     int $length = 64,
