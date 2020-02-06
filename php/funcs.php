@@ -6,7 +6,7 @@ function initDB(){
 
 	$server="localhost";
 	$username="website";
-	$password=fread($dbpass, filesize("dbpass"));//"ycH*4|6KboGmKB";//fread($dbpass, filesize("dbpass"));
+	$password="ycH*4|6KboGmKB";//fread($dbpass, filesize("dbpass"));
 	$database="website";
 
 	fclose($dbpass);
