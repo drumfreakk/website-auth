@@ -1,13 +1,19 @@
 
-function loggedIn(name){
-	document.getElementById("content").innerHTML = "Welcome, ".concat(name);
+function loggedIn(){
+	$.post("/php/uname.php",
+	{
+		authcode: getCookie("authcode")
+	},
+	function(data,status){
+		document.getElementById("content").innerHTML = "Welcome, ".concat(data);
+	});
 }
 
 window.addEventListener('load', function () {
 	var authcode = getCookie("authcode");
 
 	if (authcode != null) {
-		loggedIn(authcode);
+		loggedIn();
 	}
 })
 
@@ -28,23 +34,12 @@ function submitCreds(){
 
 	$.post("/php/auth.php",
 	{
-		uname: username,
-		pswd: password
+		username: username,
+		password: password
 	},
 	function(data,status){
-		alert("Data: " + data + "\nStatus: " + status);
-		document.cookie = "authcode=".concat(data.split("&")[1]).concat("; expires=").concat(data.split("&")[0]);
-		loggedIn(data);
-	});
-}
-
-
-function unam(){
-	$.post("/php/uname.php",
-	{
-	},
-	function(data,status){
-		alert("Data: " + data + "\nStatus: " + status);
+		document.cookie = "authcode=".concat(data.split("&")[0]).concat("; expires=").concat(data.split("&")[1]);
+		loggedIn();
 	});
 }
 
