@@ -10,24 +10,25 @@ if($_REQUEST["username"] && $_REQUEST["password"]){
 	$conn=initDB();
 	
 	//TODO hash password
-	$stmt=$conn->prepare("SELECT uID FROM users WHERE username = :username AND password = :password");
+	$stmt=$conn->prepare("SELECT uID, password FROM users WHERE username = :username");
 	$stmt->bindParam(':username', $username);
-	$stmt->bindParam(':password', $password);
 
 	$username = $_REQUEST["username"];
-	$password = $_REQUEST["password"];
 	$stmt->execute();
 	
 	while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
-		$ins = $conn->prepare("INSERT INTO authcodes (uID, code, expiry) VALUES (:uID, :code, :expiry)");
-		$ins->bindParam(":uID", $row['uID']);
-		$ins->bindParam(":code", $authcode);
-		$ins->bindParam(":expiry", $exp_unix);
+		if(password_verify($_REQUEST["password"], $row['password'])){	
+	
+			$ins = $conn->prepare("INSERT INTO authcodes (uID, code, expiry) VALUES (:uID, :code, :expiry)");
+			$ins->bindParam(":uID", $row['uID']);
+			$ins->bindParam(":code", $authcode);
+			$ins->bindParam(":expiry", $exp_unix);
 
-		$exp_unix = strtotime($exp);
-		$ins->execute();
+			$exp_unix = strtotime($exp);
+			$ins->execute();
 
-		echo $authcode . "&" . $exp . " GMT+0100 (Central European Standard Time)";
+			echo $authcode . "&" . $exp . " GMT+0100 (Central European Standard Time)";
+		}
 	}
 	$conn = null;
 }
