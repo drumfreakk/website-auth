@@ -1,3 +1,6 @@
 Database password in file
 Log out
 handle errors
+encrypt password transfer
+Functions for inserting/getting authcodes/others
+authcode permissions
