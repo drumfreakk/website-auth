@@ -4,7 +4,11 @@ include("funcs.php");
 
 
 if($_REQUEST["authcode"]){
-	$conn = initDB();
+	$db=initDB();
+	if($db["status"] == 1){
+		die($db["return"]);
+	}
+	$conn = $db["return"];
 
 	$stmt = $conn->prepare("SELECT uID FROM authcodes WHERE code = :code");
 	$stmt->bindParam(':code', $_REQUEST["authcode"]);

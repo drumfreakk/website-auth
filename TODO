@@ -1,6 +1,8 @@
-Database password in file
 Log out
-handle errors
+handle errors (mainly client-side/facing now)
 encrypt password transfer
 Functions for inserting/getting authcodes/others
-authcode permissions
+authcode permissions (enforce)
+
+move insert authcode to function, handle PDOException for duplicates
+
