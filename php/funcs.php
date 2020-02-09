@@ -40,31 +40,7 @@ function random_str(
 		$pieces []= $keyspace[random_int(0, $max)];
 	}
 
-	//$rStr = array("return"=>implode('', $pieces), "status"=>0);
 	return implode('', $pieces);	
-/*	
-	die(implode('', $pieces));
-	$db=initDB();
-	if($db["status"] == 1){
-		die($db["return"]);
-	}
-	$conn = $db["return"];
-
-	$checkAuth = $conn->prepare("SELECT code FROM authcodes WHERE code = :code");
-	$checkAuth->bindParam(':code', $rStr);
-	$checkAuth->execute();
-
-	while($row = $checkAuth->fetch(PDO::FETCH_ASSOC)){
-		if($row['code'] == $rStr){
-			if($depth >= 10){
-				$rStr["status"] = 1;
-				break;
-			}
-			$rStr = random_str($length, $keyspace, $depth + 1);
-		}
-	}
- */	
-	return $rStr;
 }
 
 function insert($stmt, $exp, $authcode){
@@ -77,9 +53,9 @@ function insert($stmt, $exp, $authcode){
 	return 0;
 }
 
-function insert_authcode(int $uid, $permissions){
+function insert_authcode($uid, $permissions){
 	$status = 0;
-
+	
 	$db = initDB();
 	if($db["status"] != 0){
 		$status = 1;
@@ -87,7 +63,7 @@ function insert_authcode(int $uid, $permissions){
 	$conn = $db["return"];
 
 	$ins = $conn->prepare("INSERT INTO authcodes (uID, code, expiry, p_basic) VALUES (:uID, :code, :expiry, TRUE)");
-	$ins->bindParam(":uID", $row['uID']);
+	$ins->bindParam(":uID", $uid);
 	$ins->bindParam(":code", $authcode);
 	$ins->bindParam(":expiry", $exp_unix);
 
@@ -106,6 +82,7 @@ function insert_authcode(int $uid, $permissions){
 				$inserted = true;
 				$status = 1;
 			}
+			$count = $count + 1;
 		} else {
 			$inserted = true;
 		}

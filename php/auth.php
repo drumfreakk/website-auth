@@ -19,24 +19,8 @@ if($_REQUEST["username"] && $_REQUEST["password"]){
 	while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
 		if(password_verify($_REQUEST["password"], $row['password'])){	
 	
-			/*$ins = $conn->prepare("INSERT INTO authcodes (uID, code, expiry, p_basic) VALUES (:uID, :code, :expiry, TRUE)");
-			$ins->bindParam(":uID", $row['uID']);
-			$ins->bindParam(":code", $authcode);
-			$ins->bindParam(":expiry", $exp_unix);
-
-			$exp = date("D M d Y H:i:s", strtotime(" + 10 days"));
-
-			$auth = random_str();
-			$authcode = $auth["return"];
-			if($auth["status"] != 0){
-				echo "Fuck";
-			}
-
-			$exp_unix = strtotime($exp);
-			$ins->execute();
-*/
 			$ins_authcode = insert_authcode($row['uID'], 0);
-			if($ins_authcode != 0){
+			if($ins_authcode["status"] != 0){
 				echo "Fuck";
 			}
 

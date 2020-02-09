@@ -1,8 +1,9 @@
 Log out
 handle errors (mainly client-side/facing now)
 encrypt password transfer
-Functions for inserting/getting authcodes/others
+Functions for getting authcodes/others
 authcode permissions (enforce)
 
-move insert authcode to function, handle PDOException for duplicates
-
+JSON: 	PHP: json_encode & json_decode
+	JS:  JSON.stringify & JSON.parse
+		var obj = {keya: "A", keyb: 5}; & (result) obj.keya
