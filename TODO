@@ -4,6 +4,9 @@ encrypt password transfer
 Functions for getting authcodes/others
 authcode permissions (enforce)
 
+short vs long login: only sessid or also authcode
+return errmsg
+
 JSON: 	PHP: json_encode & json_decode
 	JS:  JSON.stringify & JSON.parse
 		var obj = {keya: "A", keyb: 5}; & (result) obj.keya
