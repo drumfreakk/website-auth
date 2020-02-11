@@ -5,6 +5,7 @@ function uname(){
 		authcode: getCookie("authcode")
 	},
 	function(data,status){
-		document.getElementById("comment").innerHTML = data;
+		var dat = JSON.parse(data);
+		document.getElementById("comment").innerHTML = data.username;
 	});
 }

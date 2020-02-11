@@ -1,5 +1,9 @@
 <?php
 
+function echoError($error, $code){
+	echo '{"status":'.$code.', "error":"'.$error.'"}';
+}
+
 function initDB(){
 
 	$dbpass = fopen("./dbpass", "r") or die("Unable to open file!");
@@ -31,6 +35,7 @@ function random_str(
     int $length = 64,
     string $keyspace = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
 ){
+//	return "abcdefg";
 	if ($length < 1) {
 		throw new \RangeException("Length must be a positive integer");
 	}
@@ -53,7 +58,7 @@ function insert($stmt, $exp, $authcode){
 	return 0;
 }
 
-function insert_authcode($uid, $permissions){
+function insert_authcode($uid, $permissions = '{"basic":true}'){
 	$status = 0;
 	
 	$db = initDB();
@@ -62,11 +67,12 @@ function insert_authcode($uid, $permissions){
 	}
 	$conn = $db["return"];
 
-	$ins = $conn->prepare("INSERT INTO authcodes (uID, code, expiry, p_basic) VALUES (:uID, :code, :expiry, TRUE)");
+	$ins = $conn->prepare("INSERT INTO authcodes (uID, code, expiry, permissions) VALUES (:uID, :code, :expiry, :permissions)");
 	$ins->bindParam(":uID", $uid);
 	$ins->bindParam(":code", $authcode);
 	$ins->bindParam(":expiry", $exp_unix);
-
+	$ins->bindParam(":permissions", $permissions);
+	
 	$exp = date("D M d Y H:i:s", strtotime(" + 10 days"));
 	$exp_unix = strtotime($exp);
 
@@ -79,15 +85,15 @@ function insert_authcode($uid, $permissions){
 		if(insert($ins, strtotime($exp_unix), $authcode) == 1){
 			$authcode = random_str();
 			if($count >= 10){
-				$inserted = true;
-				$status = 1;
+				$conn = null;
+				return array("status"=>1, "error"=>"Failed logging in");
 			}
 			$count = $count + 1;
 		} else {
 			$inserted = true;
 		}
 	}
-
+	$conn = null;
 	return array("status"=>$status, "authcode"=>$authcode, "expiry"=>$exp);
 }
 

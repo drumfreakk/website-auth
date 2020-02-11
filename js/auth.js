@@ -5,7 +5,9 @@ function loggedIn(){
 		authcode: getCookie("authcode")
 	},
 	function(data,status){
-		document.getElementById("content").innerHTML = "Welcome, ".concat(data);
+		var dat = JSON.parse(data);
+		document.getElementById("comment").innerHTML = "";
+		document.getElementById("content").innerHTML = "Welcome, ".concat(dat.username);
 	});
 }
 
@@ -38,8 +40,13 @@ function submitCreds(){
 		password: password
 	},
 	function(data,status){
-		document.cookie = "authcode=".concat(data.split("&")[0]).concat("; expires=").concat(data.split("&")[1]);
-		loggedIn();
+		var dat = JSON.parse(data);
+		if(dat.status != 0){
+			document.getElementById("comment").innerHTML = dat.error;
+		}else{
+			document.cookie = "authcode=".concat(dat.authcode).concat("; expires=").concat(dat.expiry);
+			loggedIn();
+		}
 	});
 }
 
