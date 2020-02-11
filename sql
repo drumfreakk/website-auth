@@ -19,7 +19,7 @@ CREATE TABLE authcodes (
 	uID INT NOT NULL, 
 	code VARCHAR(255) NOT NULL UNIQUE, 
 	expiry INT UNSIGNED NOT NULL, 
-	p_basic BOOL,
+	permissions JSON,
 	PRIMARY KEY (codeID) 
 );
 

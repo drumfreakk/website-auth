@@ -14,8 +14,6 @@ function getCookie(name) {
         end = dc.length;
         }
     }
-    // because unescape has been deprecated, replaced with decodeURI
-    //return unescape(dc.substring(begin + prefix.length, end));
     return decodeURI(dc.substring(begin + prefix.length, end));
 }
 
