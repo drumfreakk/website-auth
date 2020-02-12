@@ -1,0 +1,4 @@
+Error response: {"status":<code, int>, "error":<error, string>}
+Normal response (not yet completely implemented): {"status":0, "response":<response, string (encrypted)>}
+
+

@@ -6,8 +6,16 @@ function loggedIn(){
 	},
 	function(data,status){
 		var dat = JSON.parse(data);
-		document.getElementById("comment").innerHTML = "";
-		document.getElementById("content").innerHTML = "Welcome, ".concat(dat.username);
+		if(dat.status != 0){
+			document.getElementById("comment").innerHTML = dat.error;
+			if(dat.status == 1){
+				//remove cookie
+				document.cookie = "authcode=; expires=Thu, 01 Jan 1970 00:00:01 GMT";
+			}
+		} else {
+			document.getElementById("comment").innerHTML = "";
+			document.getElementById("content").innerHTML = "Welcome, ".concat(dat.response);
+		}
 	});
 }
 
@@ -44,7 +52,8 @@ function submitCreds(){
 		if(dat.status != 0){
 			document.getElementById("comment").innerHTML = dat.error;
 		}else{
-			document.cookie = "authcode=".concat(dat.authcode).concat("; expires=").concat(dat.expiry);
+			var date = new Date(dat.expiry * 1000);
+			document.cookie = "authcode=".concat(dat.authcode).concat("; expires=").concat(date);
 			loggedIn();
 		}
 	});

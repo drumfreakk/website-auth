@@ -6,6 +6,10 @@ function uname(){
 	},
 	function(data,status){
 		var dat = JSON.parse(data);
-		document.getElementById("comment").innerHTML = data.username;
+		if(dat.status == 2){
+			document.getElementById("comment").innerHTML = dat.error;
+		} else {
+			document.getElementById("comment").innerHTML = dat.username;
+		}
 	});
 }

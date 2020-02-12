@@ -48,11 +48,12 @@ function random_str(
 	return implode('', $pieces);	
 }
 
-function insert($stmt, $exp, $authcode){
+function insert($stmt){
 	try{
 		$stmt->execute();
 	}
 	catch(PDOException $e){
+		die($e);
 		return 1;
 	}
 	return 0;
@@ -70,11 +71,10 @@ function insert_authcode($uid, $permissions = '{"basic":true}'){
 	$ins = $conn->prepare("INSERT INTO authcodes (uID, code, expiry, permissions) VALUES (:uID, :code, :expiry, :permissions)");
 	$ins->bindParam(":uID", $uid);
 	$ins->bindParam(":code", $authcode);
-	$ins->bindParam(":expiry", $exp_unix);
+	$ins->bindParam(":expiry", $exp);
 	$ins->bindParam(":permissions", $permissions);
 	
-	$exp = date("D M d Y H:i:s", strtotime(" + 10 days"));
-	$exp_unix = strtotime($exp);
+	$exp = strtotime("+ 10 days");
 
 	$authcode = random_str();
 
@@ -82,7 +82,7 @@ function insert_authcode($uid, $permissions = '{"basic":true}'){
 	$count = 0;	
 
 	while(!$inserted){
-		if(insert($ins, strtotime($exp_unix), $authcode) == 1){
+		if(insert($ins) == 1){
 			$authcode = random_str();
 			if($count >= 10){
 				$conn = null;

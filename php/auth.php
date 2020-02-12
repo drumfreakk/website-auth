@@ -24,7 +24,7 @@ if($_REQUEST["username"] && $_REQUEST["password"]){
 		if($ins_authcode["status"] != 0){
 			echoError($ins_authcode['error'], $ins_authcode['status']);
 		}else{
-			$str = array("authcode"=>$ins_authcode['authcode'], "expiry"=>$ins_authcode['expiry'] . " GMT+0100 (Central European Standard Time)", "status"=>0);
+			$str = array("authcode"=>$ins_authcode['authcode'], "expiry"=>$ins_authcode['expiry'], "status"=>0);
 			echo json_encode($str); 
 		}
 	}

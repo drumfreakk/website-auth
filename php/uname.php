@@ -11,20 +11,20 @@ function checkAuth($authcode){
 
 	$conn = $db["return"];
 
-	$stmt = $conn->prepare("SELECT uID, permissions, expiry FROM authcodes WHERE code = :code");
+	$stmt = $conn->prepare("SELECT uID, permissions, expiry, codeId FROM authcodes WHERE code = :code");
 	$stmt->bindParam(':code', $authcode);
 	$stmt->execute();
 
 	$row = $stmt->fetch(PDO::FETCH_ASSOC);
-
-	$conn = null;
 
 	if($row['uID'] == NULL){
 		return array("status"=>1, "error"=>"It seems you have been logged out...");
 	}
 
 	if($row['expiry'] <= time()){
-	
+		$del = $conn->prepare("DELETE FROM authcodes WHERE codeId = :codeId");
+		$del->bindParam(':codeId', $row['codeId']);
+		$del->execute();
 
 		return array("status"=>2, "error"=>"Too late");
 	}
@@ -35,36 +35,31 @@ function checkAuth($authcode){
 
 if($_REQUEST["authcode"]){
 
-	var_dump(checkAuth($_REQUEST["authcode"]));
-/*
-	$db=initDB();
-	if($db["status"] == 1){
-		die($db["return"]);
-	}
-	$conn = $db["return"];
+	$auth = checkAuth($_REQUEST["authcode"]);
 
-	$stmt = $conn->prepare("SELECT uID FROM authcodes WHERE code = :code");
-	$stmt->bindParam(':code', $_REQUEST["authcode"]);
-	$stmt->execute();
+	if($auth['status'] != 0){
+		echo json_encode($auth);
+	} else {
+		if($auth['permissions']->basic == true){
 
+			$db=initDB();
+			if($db["status"] == 1){
+				echoError("Server error, please try again.", 1);		
+				exit();
+			}
 
-	while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
-		$usr = $conn->prepare("SELECT username FROM users WHERE uID = :uid");
-		$usr->bindParam(':uid', $row["uID"]);
-		$usr->execute();
-		while($unm = $usr->fetch(PDO::FETCH_ASSOC)){
-			$status = 0;
-			echo '{"username":"'.$unm["username"].'","status":'.$status.'}';
+			$conn = $db["return"];
+		
+			$stmt = $conn->prepare("SELECT username FROM users WHERE uID = :uid");
+			$stmt->bindParam(':uid', $auth['uID']);
+			$stmt->execute(); 
+
+			echo json_encode(array("status"=>0, "response"=>$stmt->fetch(PDO::FETCH_ASSOC)['username']));
+		} else {
+			echoError("Incorrect permissions", 1);
 		}
-
-		//echo "<br/>Expiry: " . $row["expiry"]. "<br/>uID: ". $row["uID"]."<br/><br/>";
-		//	if($row["expiry"] == date("Y-M-D H:i:s"){
-				
-		//	}
 	}
 
-	$conn = null;
-*/
 }
 
 ?>

@@ -1,7 +1,8 @@
-Log out
 handle errors (mainly client-side/facing now)
 encrypt password transfer
 Functions for getting authcodes/others
 authcode permissions (enforce)
 move check authcode func & enforce time
 short vs long login: only sessid or also authcode
+Logging
+daemon to (add) remove codes
