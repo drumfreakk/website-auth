@@ -6,3 +6,4 @@ move check authcode func & enforce time
 short vs long login: only sessid or also authcode
 Logging
 daemon to (add) remove codes
+sessid is linked to session, when you login its linked to account serverside, authcode stored seperately
