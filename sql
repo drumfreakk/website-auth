@@ -23,3 +23,12 @@ CREATE TABLE authcodes (
 	PRIMARY KEY (codeID) 
 );
 
+CREATE TABLE sessids ( 
+	id INT NOT NULL AUTO_INCREMENT, 
+	code VARCHAR(255) NOT NULL UNIQUE, 
+	expiry INT UNSIGNED NOT NULL, 
+	permissions JSON, 
+	uID INT, 
+	codeID INT, 
+	PRIMARY KEY (id) 
+);

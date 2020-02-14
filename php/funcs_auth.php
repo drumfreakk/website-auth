@@ -1,35 +1,7 @@
 <?php
 
-function echoError($error, $code){
-	echo '{"status":'.$code.', "error":"'.$error.'"}';
-}
-
-function initDB(){
-
-	$dbpass = fopen("./dbpass", "r") or die("Unable to open file!");
-
-	$server="localhost";
-	$username="website";
-	$password=fread($dbpass, filesize("./dbpass") - 1);
-	$database="website";
-
-	fclose($dbpass);
-
-	$conn = null;
-	$err = 0;
-
-	try{
-		$conn = new PDO("mysql:host=$server;dbname=$database", $username, $password);
-		$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-	}
-	catch(PDOException $e){
-		echo "Connection failed: " . $e->getMessage();
-		$conn = $e->getMessage();
-		$err = 1;
-	}
-
-	return array("return"=>$conn, "status"=>$err);
-}
+include_once("funcs_db.php");
+include_once("funcs_err.php");
 
 function random_str(
     int $length = 64,
@@ -95,6 +67,37 @@ function insert_authcode($uid, $permissions = '{"basic":true}'){
 	}
 	$conn = null;
 	return array("status"=>$status, "authcode"=>$authcode, "expiry"=>$exp);
+}
+
+function checkAuth($authcode){
+	$db=initDB();
+	if($db["status"] == 1){
+		echoError("Server error, please try again.", 1);		
+	}
+
+	$conn = $db["return"];
+
+	$stmt = $conn->prepare("SELECT uID, permissions, expiry, codeId FROM authcodes WHERE code = :code");
+	$stmt->bindParam(':code', $authcode);
+	$stmt->execute();
+
+	$row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+	if($row['uID'] == NULL){
+		echoError("It seems you have been logged out...", 1);
+		return array("status"=>1);
+	}
+
+	if($row['expiry'] <= time()){
+		$del = $conn->prepare("DELETE FROM authcodes WHERE codeId = :codeId");
+		$del->bindParam(':codeId', $row['codeId']);
+		$del->execute();
+		
+		echoError("Too late", 2);
+		return array("status"=>2);
+	}
+	
+	return array("status"=>0, "uID"=>$row['uID'], "permissions"=>json_decode($row['permissions'], false));	
 }
 
 ?>

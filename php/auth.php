@@ -1,6 +1,6 @@
 <?php
 
-include("funcs.php");
+include_once("funcs_auth.php");
 
 if($_REQUEST["username"] && $_REQUEST["password"]){
 	

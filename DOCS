@@ -1,4 +1,3 @@
 Error response: {"status":<code, int>, "error":<error, string>}
-Normal response (not yet completely implemented): {"status":0, "response":<response, string (encrypted)>}
-
-
+Login response: {"status":0, "authcode":<authcode, string>, "expiry":<expiry, int utc timestamp>}
+Standard response; {"status":0, "response":<response>}
