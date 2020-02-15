@@ -5,3 +5,4 @@ sessid is linked to session, when you login its linked to account serverside, au
 authcode timescale
 clientside hashing+salting (first try now ish, make it secure later (with https) and try to crack it in the mean time?)
 add sessid support (on first request add sessid, sent with every req., link on login)
+Add OAuth2
