@@ -1,8 +1,8 @@
 
-function loggedIn(){
+function loggedIn(authcode){
 	$.post("/php/uname.php",
 	{
-		authcode: getCookie("authcode")
+		authcode: authcode
 	},
 	function(data,status){
 		var dat = JSON.parse(data);
@@ -18,16 +18,6 @@ function loggedIn(){
 		}
 	});
 }
-
-window.addEventListener('load', function () {
-	var authcode = getCookie("authcode");
-
-	if (authcode != null) {
-		loggedIn();
-	}
-})
-
-
 
 function submitCreds(){
 	var username = document.getElementById("username").value;
@@ -54,7 +44,7 @@ function submitCreds(){
 		}else{
 			var date = new Date(dat.expiry * 1000);
 			document.cookie = "authcode=".concat(dat.authcode).concat("; expires=").concat(date);
-			loggedIn();
+			loggedIn(dat.authcode);
 		}
 	});
 }
