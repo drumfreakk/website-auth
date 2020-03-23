@@ -25,8 +25,8 @@ if(!isset($_COOKIE["authcode"])){
 	<?php
 } else {
 	
-	$req = json_decode(post_request("http://192.168.2.7/php/uname.php", array("authcode"=>$_COOKIE["authcode"])));
-
+	$req = json_decode(post_request("http://localhost/php/uname.php", array("authcode"=>$_COOKIE["authcode"])));
+	
 	if($req->status == 0){
 		echo "Welcome, ".$req->response;
 	} else {

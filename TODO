@@ -1,4 +1,5 @@
 authcode permissions (enforce)
+enforce maximum possible permissions for authcode from user permissions
 Logging
 daemon to (add) remove codes
 sessid is linked to session, when you login its linked to account serverside, authcode stored seperately
@@ -8,3 +9,6 @@ add sessid support (on first request add sessid, sent with every req., link on l
 ipv html php files that automatically check for sessid?
 user permission levels
 Add OAuth2
+
+
+SESSID
