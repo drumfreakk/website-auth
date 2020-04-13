@@ -1,0 +1,3 @@
+Error response: {"status":<code, int>, "error":<error, string>}
+Login response: {"status":0, "authcode":<authcode, string>, "expiry":<expiry, int utc timestamp>}
+Standard response; {"status":0, "response":<response>}
